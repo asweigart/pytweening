@@ -1,4 +1,4 @@
-pytweening
+PyTweening
 ==========
 
 A collection of tweening / easing functions implemented in Python.
