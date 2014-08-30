@@ -1,9 +1,24 @@
 import math
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 # from http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm#Python
 def getLine(x1, y1, x2, y2):
+    """Returns a list of (x, y) tuples of every point on a line between
+    (x1, y1) and (x2, y2). The x and y values inside the tuple are integers.
+
+    Line generated with the Bresenham algorithm.
+
+    Args:
+      x1 (int, float): The x coordinate of the line's start point.
+      y1 (int, float): The y coordinate of the line's start point.
+      x2 (int, float): The x coordinate of the line's end point.
+      y2 (int, float): The y coordiante of the line's end point.
+
+    Returns:
+      [(x1, y1), (x2, y2), (x3, y3), ...]
+    """
+    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
     points = []
     issteep = abs(y2-y1) > abs(x2-x1)
     if issteep:
@@ -38,37 +53,70 @@ def getLine(x1, y1, x2, y2):
     return points
 
 
-def getExtendedLine(x1, y1, x2, y2, extension=2.0):
-    x2 = int((x2 - x1) * extension) + x1
-    y2 = int((y2 - y1) * extension) + y1
-    return getLine(x1, y1, x2, y2)
+def getPointOnLine(x1, y1, x2, y2, n):
+    """Returns the (x, y) tuple of the point that has progressed a proportion
+    n along the line defined by the two x, y coordinates.
 
+    Args:
+      x1 (int, float): The x coordinate of the line's start point.
+      y1 (int, float): The y coordinate of the line's start point.
+      x2 (int, float): The x coordinate of the line's end point.
+      y2 (int, float): The y coordiante of the line's end point.
+      n (float): Progress along the line. 0.0 is the start point, 1.0 is the end point. 0.5 is the midpoint. This value can be less than 0.0 or greater than 1.0.
 
-def getLinePoint(x1, y1, x2, y2, n):
+    Returns:
+      Tuple of floats for the x, y coordinate of the point.
+    """
     x = ((x2 - x1) * n) + x1
     y = ((y2 - y1) * n) + y1
     return  (x, y)
 
 
 def linear(n):
+    """A linear tween function
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return n
 
 
 def easeInQuad(n):
+    """A quadratic tween function that begins slow and then accelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return n**2;
 
 
 def easeOutQuad(n):
+    """A quadratic tween function that begins fast and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return -n * (n-2)
 
 
 def easeInOutQuad(n):
+    """A quadratic tween function that accelerates, reaches the midpoint, and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     if n < 0.5:
@@ -79,12 +127,28 @@ def easeInOutQuad(n):
 
 
 def easeInCubic(n):
+    """A cubic tween function that begins slow and then accelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return n**3
 
 
 def easeOutCubic(n):
+    """A cubic tween function that begins fast and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     n = n - 1
@@ -92,6 +156,14 @@ def easeOutCubic(n):
 
 
 def easeInOutCubic(n):
+    """A cubic tween function that accelerates, reaches the midpoint, and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     n = 2 * n
@@ -103,12 +175,28 @@ def easeInOutCubic(n):
 
 
 def easeInQuart(n):
+    """A quartic tween function that begins slow and then accelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return n**4
 
 
 def easeOutQuart(n):
+    """A quartic tween function that begins fast and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     n = n - 1
@@ -116,6 +204,14 @@ def easeOutQuart(n):
 
 
 def easeInOutQuart(n):
+    """A quartic tween function that accelerates, reaches the midpoint, and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     n = 2 * n
@@ -127,12 +223,28 @@ def easeInOutQuart(n):
 
 
 def easeInQuint(n):
+    """A quintic tween function that begins slow and then accelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return n**5
 
 
 def easeOutQuint(n):
+    """A quintic tween function that begins fast and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     n = n - 1
@@ -140,6 +252,14 @@ def easeOutQuint(n):
 
 
 def easeInOutQuint(n):
+    """A quintic tween function that accelerates, reaches the midpoint, and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     n = 2 * n
@@ -151,24 +271,56 @@ def easeInOutQuint(n):
 
 
 def easeInSine(n):
+    """A sinusoidal tween function that begins slow and then accelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return -1 * math.cos(n * math.pi / 2) + 1
 
 
 def easeOutSine(n):
+    """A sinusoidal tween function that begins fast and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return math.sin(n * math.pi / 2)
 
 
 def easeInOutSine(n):
+    """A sinusoidal tween function that accelerates, reaches the midpoint, and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return -0.5 * (math.cos(math.pi * n) - 1)
 
 
 def easeInExpo(n):
+    """An exponential tween function that begins slow and then accelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     if n == 0:
@@ -178,6 +330,14 @@ def easeInExpo(n):
 
 
 def easeOutExpo(n):
+    """An exponential tween function that begins fast and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     if n == 1:
@@ -187,6 +347,14 @@ def easeOutExpo(n):
 
 
 def easeInOutExpo(n):
+    """An exponential tween function that accelerates, reaches the midpoint, and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     if n == 0:
@@ -204,12 +372,28 @@ def easeInOutExpo(n):
 
 
 def easeInCirc(n):
+    """A circular tween function that begins slow and then accelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return -1 * (math.sqrt(1 - n * n) - 1)
 
 
 def easeOutCirc(n):
+    """A circular tween function that begins fast and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     n -= 1
@@ -217,6 +401,14 @@ def easeOutCirc(n):
 
 
 def easeInOutCirc(n):
+    """A circular tween function that accelerates, reaches the midpoint, and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     n = n * 2
@@ -228,6 +420,14 @@ def easeInOutCirc(n):
 
 
 def easeInElastic(n, amplitude=None, period=None):
+    """An elastic tween function that begins with an increasing wobble and then snaps into the destination.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     if period is None:
@@ -247,6 +447,14 @@ def easeInElastic(n, amplitude=None, period=None):
 
 
 def easeOutElastic(n, amplitude=None, period=None):
+    """An elastic tween function that overshoots the destination and then "rubber bands" into the destination.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
 
@@ -266,6 +474,14 @@ def easeOutElastic(n, amplitude=None, period=None):
 
 
 def easeInOutElastic(n, amplitude=None, period=None):
+    """An elastic tween function wobbles towards the midpoint.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
 
@@ -291,12 +507,28 @@ def easeInOutElastic(n, amplitude=None, period=None):
 
 
 def easeInBack(n, s=1.70158):
+    """A tween function that backs up first at the start and then goes to the destination.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return n * n * ((s + 1) * n - s)
 
 
 def easeOutBack(n, s=1.70158):
+    """A tween function that overshoots the destination a little and then backs into the destination.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     n = n - 1
@@ -304,6 +536,14 @@ def easeOutBack(n, s=1.70158):
 
 
 def easeInOutBack(n, s=1.70158):
+    """A "back-in" tween function that overshoots both the start and destination.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
 
@@ -318,12 +558,28 @@ def easeInOutBack(n, s=1.70158):
 
 
 def easeInBounce(n):
+    """A bouncing tween function that begins bouncing and then jumps to the destination.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     return 1 - easeOutBounce(1 - n)
 
 
 def easeOutBounce(n):
+    """A bouncing tween function that hits the destination and then bounces to rest.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     if n < (1/2.75):
@@ -340,6 +596,14 @@ def easeOutBounce(n):
 
 
 def easeInOutBounce(n):
+    """A bouncing tween function that bounces at the start and end.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
     if n < 0.5:
