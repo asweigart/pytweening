@@ -19,10 +19,10 @@ class LineTests(unittest.TestCase):
                 self.assertEqual(startPoint, lineExtendedPoints[0], 'Start point returned from getExtendedLine() is not the same as the original start point.')
                 self.assertTrue(endPoint in lineExtendedPoints, 'End point does not exist in points returned from getExtendedLine().')
 
-                x, y = pytweening.getLinePoint(startPoint[0], startPoint[1], endPoint[0], endPoint[1], 0.0)
-                self.assertEqual((int(x), int(y)), (linePoints[0][0], linePoints[0][1]), 'Start point of getLinePoint() is not the same as the line\'s start point.')
-                x, y = pytweening.getLinePoint(startPoint[0], startPoint[1], endPoint[0], endPoint[1], 1.0)
-                self.assertEqual((int(x), int(y)), (linePoints[-1][0], linePoints[-1][1]), 'End point of getLinePoint() is not the same as the line\'s end point.')
+                x, y = pytweening.getPointOnLine(startPoint[0], startPoint[1], endPoint[0], endPoint[1], 0.0)
+                self.assertEqual((int(x), int(y)), (linePoints[0][0], linePoints[0][1]), 'Start point of getPointOnLine() is not the same as the line\'s start point.')
+                x, y = pytweening.getPointOnLine(startPoint[0], startPoint[1], endPoint[0], endPoint[1], 1.0)
+                self.assertEqual((int(x), int(y)), (linePoints[-1][0], linePoints[-1][1]), 'End point of getPointOnLine() is not the same as the line\'s end point.')
 
 
 if __name__ == '__main__':
