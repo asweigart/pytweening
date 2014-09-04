@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 
-sys.path.append(os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('..'))
 import pytweening
 
 
@@ -14,10 +14,6 @@ class LineTests(unittest.TestCase):
                 linePoints = pytweening.getLine(startPoint[0], startPoint[1], endPoint[0], endPoint[1])
                 self.assertEqual(startPoint, linePoints[0], 'Start point returned from getLine() is not the same as the original start point.')
                 self.assertEqual(endPoint, linePoints[-1], 'End point returned from getLine() is not the same as the original end point.')
-
-                lineExtendedPoints = pytweening.getExtendedLine(startPoint[0], startPoint[1], endPoint[0], endPoint[1])
-                self.assertEqual(startPoint, lineExtendedPoints[0], 'Start point returned from getExtendedLine() is not the same as the original start point.')
-                self.assertTrue(endPoint in lineExtendedPoints, 'End point does not exist in points returned from getExtendedLine().')
 
                 x, y = pytweening.getPointOnLine(startPoint[0], startPoint[1], endPoint[0], endPoint[1], 0.0)
                 self.assertEqual((int(x), int(y)), (linePoints[0][0], linePoints[0][1]), 'Start point of getPointOnLine() is not the same as the line\'s start point.')
