@@ -1,6 +1,7 @@
 import unittest
 import sys
 import os
+import doctest
 
 sys.path.insert(0, os.path.abspath('..'))
 import pytweening

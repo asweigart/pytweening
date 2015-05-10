@@ -17,6 +17,14 @@ def getLine(x1, y1, x2, y2):
 
     Returns:
       [(x1, y1), (x2, y2), (x3, y3), ...]
+
+    Example:
+    >>> getLine(0, 0, 6, 6)
+    [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6)]
+    >>> getLine(0, 0, 3, 6)
+    [(0, 0), (0, 1), (1, 2), (1, 3), (2, 4), (2, 5), (3, 6)]
+    >>> getLine(3, 3, -3, -3)
+    [(3, 3), (2, 2), (1, 1), (0, 0), (-1, -1), (-2, -2), (-3, -3)]
     """
     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
     points = []
@@ -66,6 +74,22 @@ def getPointOnLine(x1, y1, x2, y2, n):
 
     Returns:
       Tuple of floats for the x, y coordinate of the point.
+
+    Example:
+    >>> getPointOnLine(0, 0, 6, 6, 0)
+    (0, 0)
+    >>> getPointOnLine(0, 0, 6, 6, 1)
+    (6, 6)
+    >>> getPointOnLine(0, 0, 6, 6, 0.5)
+    (3.0, 3.0)
+    >>> getPointOnLine(0, 0, 6, 6, 0.75)
+    (4.5, 4.5)
+    >>> getPointOnLine(3, 3, -3, -3, 0.5)
+    (0.0, 0.0)
+    >>> getPointOnLine(3, 3, -3, -3, 0.25)
+    (1.5, 1.5)
+    >>> getPointOnLine(3, 3, -3, -3, 0.75)
+    (-1.5, -1.5)
     """
     x = ((x2 - x1) * n) + x1
     y = ((y2 - y1) * n) + y1
@@ -74,6 +98,20 @@ def getPointOnLine(x1, y1, x2, y2, n):
 
 def linear(n):
     """A linear tween function
+
+    Example:
+    >>> linear(0.0)
+    0.0
+    >>> linear(0.2)
+    0.2
+    >>> linear(0.4)
+    0.4
+    >>> linear(0.6)
+    0.6
+    >>> linear(0.8)
+    0.8
+    >>> linear(1.0)
+    1.0
     """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
