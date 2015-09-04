@@ -93,7 +93,7 @@ def getPointOnLine(x1, y1, x2, y2, n):
     """
     x = ((x2 - x1) * n) + x1
     y = ((y2 - y1) * n) + y1
-    return  (x, y)
+    return (x, y)
 
 
 def linear(n):
@@ -129,7 +129,7 @@ def easeInQuad(n):
     """
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
-    return n**2;
+    return n**2
 
 
 def easeOutQuad(n):
@@ -481,7 +481,7 @@ def easeInElastic(n, amplitude=None, period=None):
         s = period / (2 * math.pi) * math.asin(1 / amplitude)
 
     n -= 1
-    return -1 * (amplitude * 2**(10*n) * math.sin( (n-s)*(2*math.pi) / period))
+    return -1 * (amplitude * 2**(10*n) * math.sin((n-s)*(2*math.pi) / period))
 
 
 def easeOutElastic(n, amplitude=None, period=None):
@@ -648,4 +648,3 @@ def easeInOutBounce(n):
         return easeInBounce(n * 2) * 0.5
     else:
         return easeOutBounce(n * 2 - 1) * 0.5 + 0.5
-
