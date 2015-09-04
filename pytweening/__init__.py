@@ -96,6 +96,13 @@ def getPointOnLine(x1, y1, x2, y2, n):
     return (x, y)
 
 
+def _checkRange(n):
+    """Raises ValueError if the argument is not between 0.0 and 1.0.
+    """
+    if not 0.0 <= n <= 1.0:
+        raise ValueError('Argument must be between 0.0 and 1.0.')
+
+
 def linear(n):
     """A linear tween function
 
@@ -113,8 +120,7 @@ def linear(n):
     >>> linear(1.0)
     1.0
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return n
 
 
@@ -127,8 +133,7 @@ def easeInQuad(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return n**2
 
 
@@ -141,8 +146,7 @@ def easeOutQuad(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return -n * (n-2)
 
 
@@ -155,8 +159,7 @@ def easeInOutQuad(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     if n < 0.5:
         return 2 * n**2
     else:
@@ -173,8 +176,7 @@ def easeInCubic(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return n**3
 
 
@@ -187,8 +189,7 @@ def easeOutCubic(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     n = n - 1
     return n**3 + 1
 
@@ -202,8 +203,7 @@ def easeInOutCubic(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     n = 2 * n
     if n < 1:
         return 0.5 * n**3
@@ -221,8 +221,7 @@ def easeInQuart(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return n**4
 
 
@@ -235,8 +234,7 @@ def easeOutQuart(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     n = n - 1
     return -(n**4 - 1)
 
@@ -250,8 +248,7 @@ def easeInOutQuart(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     n = 2 * n
     if n < 1:
         return 0.5 * n**4
@@ -269,8 +266,7 @@ def easeInQuint(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return n**5
 
 
@@ -283,8 +279,7 @@ def easeOutQuint(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     n = n - 1
     return n**5 + 1
 
@@ -298,8 +293,7 @@ def easeInOutQuint(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     n = 2 * n
     if n < 1:
         return 0.5 * n**5
@@ -317,8 +311,7 @@ def easeInSine(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return -1 * math.cos(n * math.pi / 2) + 1
 
 
@@ -331,8 +324,7 @@ def easeOutSine(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return math.sin(n * math.pi / 2)
 
 
@@ -345,8 +337,7 @@ def easeInOutSine(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return -0.5 * (math.cos(math.pi * n) - 1)
 
 
@@ -359,8 +350,7 @@ def easeInExpo(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     if n == 0:
         return 0
     else:
@@ -376,8 +366,7 @@ def easeOutExpo(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     if n == 1:
         return 1
     else:
@@ -393,8 +382,7 @@ def easeInOutExpo(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     if n == 0:
         return 0
     elif n == 1:
@@ -418,8 +406,7 @@ def easeInCirc(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return -1 * (math.sqrt(1 - n * n) - 1)
 
 
@@ -432,8 +419,7 @@ def easeOutCirc(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     n -= 1
     return math.sqrt(1 - (n * n))
 
@@ -447,8 +433,7 @@ def easeInOutCirc(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     n = n * 2
     if n < 1:
         return -0.5 * (math.sqrt(1 - n**2) - 1)
@@ -457,7 +442,7 @@ def easeInOutCirc(n):
         return 0.5 * (math.sqrt(1 - n**2) + 1)
 
 
-def easeInElastic(n, amplitude=None, period=None):
+def easeInElastic(n, amplitude=1, period=0.3):
     """An elastic tween function that begins with an increasing wobble and then snaps into the destination.
 
     Args:
@@ -466,25 +451,11 @@ def easeInElastic(n, amplitude=None, period=None):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
-    if period is None:
-        period = 0.3
-
-    if amplitude is None:
-        amplitude = 1
-
-    if amplitude < 1:
-        amplitude = 1
-        s = period / 4
-    else:
-        s = period / (2 * math.pi) * math.asin(1 / amplitude)
-
-    n -= 1
-    return -1 * (amplitude * 2**(10*n) * math.sin((n-s)*(2*math.pi) / period))
+    _checkRange(n)
+    return 1 - easeOutElastic(1-n, amplitude=amplitude, period=period)
 
 
-def easeOutElastic(n, amplitude=None, period=None):
+def easeOutElastic(n, amplitude=1, period=0.3):
     """An elastic tween function that overshoots the destination and then "rubber bands" into the destination.
 
     Args:
@@ -493,14 +464,7 @@ def easeOutElastic(n, amplitude=None, period=None):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
-
-    if period is None:
-        period = 0.3
-
-    if amplitude is None:
-        amplitude = 1
+    _checkRange(n)
 
     if amplitude < 1:
         amplitude = 1
@@ -511,7 +475,7 @@ def easeOutElastic(n, amplitude=None, period=None):
     return amplitude * 2**(-10*n) * math.sin((n-s)*(2*math.pi / period)) + 1
 
 
-def easeInOutElastic(n, amplitude=None, period=None):
+def easeInOutElastic(n, amplitude=1, period=0.5):
     """An elastic tween function wobbles towards the midpoint.
 
     Args:
@@ -520,28 +484,12 @@ def easeInOutElastic(n, amplitude=None, period=None):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
-
-    if period is None:
-        period = 0.5
-
-    if amplitude is None:
-        amplitude = 1
-
-    if amplitude < 1:
-        amplitude = 1
-        s = period / 4
-    else:
-        s = period / (2 * math.pi) * math.asin(1 / amplitude)
-
+    _checkRange(n)
     n *= 2
     if n < 1:
-        n = n - 1
-        return -0.5 * (amplitude * 2**(10*n) * math.sin((n - s) * 2 * math.pi / period))
+        return easeInElastic(n, amplitude=amplitude, period=period) / 2
     else:
-        n = n - 1
-        return amplitude * 2**(-10*n) * math.sin((n - s) * 2 * math.pi / period) * 0.5 + 1
+        return easeOutElastic(n-1, amplitude=amplitude, period=period) / 2 + 0.5
 
 
 def easeInBack(n, s=1.70158):
@@ -553,8 +501,7 @@ def easeInBack(n, s=1.70158):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return n * n * ((s + 1) * n - s)
 
 
@@ -567,8 +514,7 @@ def easeOutBack(n, s=1.70158):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     n = n - 1
     return n * n * ((s + 1) * n + s) + 1
 
@@ -582,9 +528,7 @@ def easeInOutBack(n, s=1.70158):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
-
+    _checkRange(n)
     n = n * 2
     if n < 1:
         s *= 1.525
@@ -604,8 +548,7 @@ def easeInBounce(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     return 1 - easeOutBounce(1 - n)
 
 
@@ -618,8 +561,7 @@ def easeOutBounce(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     if n < (1/2.75):
         return 7.5625 * n * n
     elif n < (2/2.75):
@@ -642,8 +584,7 @@ def easeInOutBounce(n):
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+    _checkRange(n)
     if n < 0.5:
         return easeInBounce(n * 2) * 0.5
     else:
