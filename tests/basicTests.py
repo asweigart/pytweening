@@ -43,13 +43,14 @@ TWEENS = [
     'easeInOutBounce',
 ]
 
+
 # https://stackoverflow.com/q/6655724/
 class CustomAssertions(object):
     def assertFuncValue(self, func, param, expected, funcname='function', extra_msg='', **kwargs):
-        '''Asserts that func(param) == expected.
+        """Asserts that func(param) == expected.
 
         Optionally receives the function name, used in the error message
-        '''
+        """
         value = func(param)
         if extra_msg:
             extra_msg = ' ' + extra_msg
@@ -83,18 +84,18 @@ class TestAll(unittest.TestCase, CustomAssertions):
                 delta = 2 ** -11  # around 0.0005
             elif name in ['easeInBounce', 'easeInOutBounce']:
                 delta = 2 ** -7  # around 0.0078
-            self.assertFuncValue(func, 0  , 0, name, delta=delta)
+            self.assertFuncValue(func,   0, 0, name, delta=delta)
             self.assertFuncValue(func, 0.0, 0, name, delta=delta)
 
     def test_one(self):
         for name in TWEENS:
             func = getattr(pytweening, name)
-            delta = 10 ** -10
+            delta = 2 ** -15  # i.e. VERY small
             if name in ['easeOutElastic', 'easeInOutElastic']:
-                delta = 2 ** -11 # around 0.0005
+                delta = 2 ** -11  # around 0.0005
             elif name in ['easeOutBounce', 'easeInOutBounce']:
-                delta = 0.0075
-            self.assertFuncValue(func, 1  , 1, name, delta=delta)
+                delta = 2 ** -7  # around 0.0078
+            self.assertFuncValue(func,   1, 1, name, delta=delta)
             self.assertFuncValue(func, 1.0, 1, name, delta=delta)
 
     def test_wrong_input(self):
