@@ -1,6 +1,9 @@
+from __future__ import division
+
 import math
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
+
 
 # from http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm#Python
 def getLine(x1, y1, x2, y2):
