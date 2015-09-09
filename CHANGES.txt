@@ -1,2 +1,3 @@
+v1.0.2, 2015/09/09 -- Improved unit tests, some refactoring. Thanks Denilson!
 v1.0.1, 2014/08/30 -- Renamed getPointOnLine(), added documentation and comments.
 v1.0.0, 2014/08/04 -- Initial Pip release.
