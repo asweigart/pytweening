@@ -1,14 +1,9 @@
-
 from setuptools import setup
-
-
-# Dynamically calculate the version based on pyganim.VERSION.
-version = __import__('pytweening').__version__
 
 
 setup(
     name='PyTweening',
-    version=version,
+    version=__import__('pytweening').__version__,
     url='https://github.com/asweigart/pytweening',
     author='Al Sweigart',
     author_email='al@inventwithpython.com',
