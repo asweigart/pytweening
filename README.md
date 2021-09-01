@@ -44,3 +44,8 @@ The getLinePoint() function finds a point on the provided line (even if it exten
     (3.75, 7.5)
     >>> getLinePoint(0, 0, 5, 10, 1.0)
     (5.0, 10.0)
+
+Support
+-------
+
+If you find this project helpful and would like to support its development, [consider donating to its creator on Patreon](https://www.patreon.com/AlSweigart).
