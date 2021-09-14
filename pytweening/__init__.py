@@ -2,7 +2,7 @@ from __future__ import division
 
 import math
 
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 
 
 # from http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm#Python
