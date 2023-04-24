@@ -193,7 +193,7 @@ def easeOutCubic(n):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    n = n - 1
+    n -= 1
     return n**3 + 1
 
 
@@ -207,11 +207,11 @@ def easeInOutCubic(n):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    n = 2 * n
+    n *= 2
     if n < 1:
         return 0.5 * n**3
     else:
-        n = n - 2
+        n -= 2
         return 0.5 * (n**3 + 2)
 
 
@@ -238,7 +238,7 @@ def easeOutQuart(n):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    n = n - 1
+    n -= 1
     return -(n**4 - 1)
 
 
@@ -252,11 +252,11 @@ def easeInOutQuart(n):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    n = 2 * n
+    n *= 2
     if n < 1:
         return 0.5 * n**4
     else:
-        n = n - 2
+        n -= 2
         return -0.5 * (n**4 - 2)
 
 
@@ -283,7 +283,7 @@ def easeOutQuint(n):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    n = n - 1
+    n -= 1
     return n**5 + 1
 
 
@@ -297,12 +297,66 @@ def easeInOutQuint(n):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    n = 2 * n
+    n *= 2
     if n < 1:
         return 0.5 * n**5
     else:
-        n = n - 2
+        n -= 2
         return 0.5 * (n**5 + 2)
+
+
+def _checkDegree(degree):
+    """Raises ValueError if the argument is not a positive integer.
+    """
+    if not isinstance(degree, int) or degree < 1:
+        raise ValueError('Argument must be a positive integer.')
+
+
+def easeInPoly(n, degree=2):
+    """A polynomial tween function of given degree that begins slow and then accelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
+    _checkRange(n)
+    _checkDegree(degree)
+    return n ** degree
+
+
+def easeOutPoly(n, degree=2):
+    """A polynomial tween function of given degree that begins fast and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
+    _checkRange(n)
+    _checkDegree(degree)
+    return 1 - abs((n - 1) ** degree)
+
+
+def easeInOutPoly(n, degree=2):
+    """A polynomial tween function of given degree that accelerates, reaches the midpoint, and then decelerates.
+
+    Args:
+      n (float): The time progress, starting at 0.0 and ending at 1.0.
+
+    Returns:
+      (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
+    """
+    _checkRange(n)
+    _checkDegree(degree)
+    n *= 2
+    if n < 1:
+        return 0.5 * n ** degree
+    else:
+        n -= 2
+        return 1 - 0.5 * abs(n ** degree)
 
 
 def easeInSine(n):
@@ -391,7 +445,7 @@ def easeInOutExpo(n):
     elif n == 1:
         return 1
     else:
-        n = n * 2
+        n *= 2
         if n < 1:
             return 0.5 * 2**(10 * (n - 1))
         else:
@@ -437,11 +491,11 @@ def easeInOutCirc(n):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    n = n * 2
+    n *= 2
     if n < 1:
         return -0.5 * (math.sqrt(1 - n**2) - 1)
     else:
-        n = n - 2
+        n -= 2
         return 0.5 * (math.sqrt(1 - n**2) + 1)
 
 
@@ -518,7 +572,7 @@ def easeOutBack(n, s=1.70158):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    n = n - 1
+    n -= 1
     return n * n * ((s + 1) * n + s) + 1
 
 
@@ -532,7 +586,7 @@ def easeInOutBack(n, s=1.70158):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    n = n * 2
+    n *= 2
     if n < 1:
         s *= 1.525
         return 0.5 * (n * n * ((s + 1) * n - s))
