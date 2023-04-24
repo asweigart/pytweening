@@ -312,7 +312,7 @@ def _checkDegree(degree):
         raise ValueError('Argument must be a positive integer.')
 
 
-def easeInPoly(n, degree):
+def easeInPoly(n, degree=2):
     """A polynomial tween function of given degree that begins slow and then accelerates.
 
     Args:
@@ -326,7 +326,7 @@ def easeInPoly(n, degree):
     return n ** degree
 
 
-def easeOutPoly(n, degree):
+def easeOutPoly(n, degree=2):
     """A polynomial tween function of given degree that begins fast and then decelerates.
 
     Args:
@@ -340,7 +340,7 @@ def easeOutPoly(n, degree):
     return 1 - abs((n - 1) ** degree)
 
 
-def easeInOutPoly(n, degree):
+def easeInOutPoly(n, degree=2):
     """A polynomial tween function of given degree that accelerates, reaches the midpoint, and then decelerates.
 
     Args:
