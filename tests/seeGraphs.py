@@ -67,5 +67,5 @@ graphs = (
     pytweening.easeInOutPoly,
 )
 
-for graph in graphs[-3:]:
+for graph in graphs:
     showTween(graph)
