@@ -2,7 +2,7 @@ from __future__ import division
 
 import math
 
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 
 
 # from http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm#Python
@@ -31,7 +31,7 @@ def getLine(x1, y1, x2, y2):
     """
     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
     points = []
-    issteep = abs(y2-y1) > abs(x2-x1)
+    issteep = abs(y2 - y1) > abs(x2 - x1)
     if issteep:
         x1, y1 = y1, x1
         x2, y2 = y2, x2
@@ -41,7 +41,7 @@ def getLine(x1, y1, x2, y2):
         y1, y2 = y2, y1
         rev = True
     deltax = x2 - x1
-    deltay = abs(y2-y1)
+    deltay = abs(y2 - y1)
     error = int(deltax / 2)
     y = y1
     ystep = None
@@ -100,8 +100,7 @@ def getPointOnLine(x1, y1, x2, y2, n):
 
 
 def _checkRange(n):
-    """Raises ValueError if the argument is not between 0.0 and 1.0.
-    """
+    """Raises ValueError if the argument is not between 0.0 and 1.0."""
     if not 0.0 <= n <= 1.0:
         raise ValueError('Argument must be between 0.0 and 1.0.')
 
@@ -150,7 +149,7 @@ def easeOutQuad(n):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    return -n * (n-2)
+    return -n * (n - 2)
 
 
 def easeInOutQuad(n):
@@ -167,7 +166,7 @@ def easeInOutQuad(n):
         return 2 * n**2
     else:
         n = n * 2 - 1
-        return -0.5 * (n*(n-2) - 1)
+        return -0.5 * (n * (n - 2) - 1)
 
 
 def easeInCubic(n):
@@ -317,7 +316,7 @@ def easeInPoly(n, degree=2):
     _checkRange(n)
     if not isinstance(degree, (int, float)) or degree < 0:
         raise ValueError('degree argument must be a positive number.')
-    return n ** degree
+    return n**degree
 
 
 def easeOutPoly(n, degree=2):
@@ -350,10 +349,10 @@ def easeInOutPoly(n, degree=2):
 
     n *= 2
     if n < 1:
-        return 0.5 * n ** degree
+        return 0.5 * n**degree
     else:
         n -= 2
-        return 1 - 0.5 * abs(n ** degree)
+        return 1 - 0.5 * abs(n**degree)
 
 
 def easeInSine(n):
@@ -408,7 +407,7 @@ def easeInExpo(n):
     if n == 0:
         return 0
     else:
-        return 2**(10 * (n - 1))
+        return 2 ** (10 * (n - 1))
 
 
 def easeOutExpo(n):
@@ -444,7 +443,7 @@ def easeInOutExpo(n):
     else:
         n *= 2
         if n < 1:
-            return 0.5 * 2**(10 * (n - 1))
+            return 0.5 * 2 ** (10 * (n - 1))
         else:
             n -= 1
             # 0.5 * (-() + 2)
@@ -506,7 +505,7 @@ def easeInElastic(n, amplitude=1, period=0.3):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    return 1 - easeOutElastic(1-n, amplitude=amplitude, period=period)
+    return 1 - easeOutElastic(1 - n, amplitude=amplitude, period=period)
 
 
 def easeOutElastic(n, amplitude=1, period=0.3):
@@ -526,7 +525,7 @@ def easeOutElastic(n, amplitude=1, period=0.3):
     else:
         s = period / (2 * math.pi) * math.asin(1 / amplitude)
 
-    return amplitude * 2**(-10*n) * math.sin((n-s)*(2*math.pi / period)) + 1
+    return amplitude * 2 ** (-10 * n) * math.sin((n - s) * (2 * math.pi / period)) + 1
 
 
 def easeInOutElastic(n, amplitude=1, period=0.5):
@@ -543,7 +542,7 @@ def easeInOutElastic(n, amplitude=1, period=0.5):
     if n < 1:
         return easeInElastic(n, amplitude=amplitude, period=period) / 2
     else:
-        return easeOutElastic(n-1, amplitude=amplitude, period=period) / 2 + 0.5
+        return easeOutElastic(n - 1, amplitude=amplitude, period=period) / 2 + 0.5
 
 
 def easeInBack(n, s=1.70158):
@@ -616,16 +615,16 @@ def easeOutBounce(n):
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
     _checkRange(n)
-    if n < (1/2.75):
+    if n < (1 / 2.75):
         return 7.5625 * n * n
-    elif n < (2/2.75):
-        n -= (1.5/2.75)
+    elif n < (2 / 2.75):
+        n -= 1.5 / 2.75
         return 7.5625 * n * n + 0.75
-    elif n < (2.5/2.75):
-        n -= (2.25/2.75)
+    elif n < (2.5 / 2.75):
+        n -= 2.25 / 2.75
         return 7.5625 * n * n + 0.9375
     else:
-        n -= (2.65/2.75)
+        n -= 2.65 / 2.75
         return 7.5625 * n * n + 0.984375
 
 

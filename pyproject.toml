@@ -20,7 +20,12 @@ classifiers = [
     "Operating System :: OS Independent",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.1",
+    "Programming Language :: Python :: 3.2",
+    "Programming Language :: Python :: 3.3",
     "Programming Language :: Python :: 3.4",
     "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: 3.6",
@@ -29,12 +34,17 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
-requires-python = ">=3.4"
+requires-python = ">=2.7"
 dynamic = ["version"]
 
 [project.urls]
-"Source" = "https://github.com/asweigart/pytweening"
+"Homepage" = "https://github.com/asweigart/pytweening"
+"Bug Tracker" = "https://github.com/asweigart/pytweening/issues"
 
 [tool.setuptools.dynamic]
 version = {attr = "pytweening.__version__"}
+
+[tool.ruff]
+line-length = 120
