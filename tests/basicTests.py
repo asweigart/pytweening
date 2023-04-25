@@ -41,6 +41,9 @@ TWEENS = [
     'easeInBounce',
     'easeOutBounce',
     'easeInOutBounce',
+    'easeInPoly',
+    'easeOutPoly',
+    'easeInOutPoly',
 ]
 
 
@@ -77,9 +80,9 @@ class LineTests(unittest.TestCase):
 
 class TestAll(unittest.TestCase, CustomAssertions):
     def test_zero(self):
+        delta = 2 ** -15  # i.e. VERY small
         for name in TWEENS:
             func = getattr(pytweening, name)
-            delta = 2 ** -15  # i.e. VERY small
             if name in ['easeInElastic', 'easeInOutElastic']:
                 delta = 2 ** -11  # around 0.0005
             elif name in ['easeInBounce', 'easeInOutBounce']:
@@ -88,15 +91,23 @@ class TestAll(unittest.TestCase, CustomAssertions):
             self.assertFuncValue(func, 0.0, 0, name, delta=delta)
 
     def test_one(self):
+        delta = 2 ** -15  # i.e. VERY small
         for name in TWEENS:
             func = getattr(pytweening, name)
-            delta = 2 ** -15  # i.e. VERY small
             if name in ['easeOutElastic', 'easeInOutElastic']:
                 delta = 2 ** -11  # around 0.0005
             elif name in ['easeOutBounce', 'easeInOutBounce']:
                 delta = 2 ** -7  # around 0.0078
             self.assertFuncValue(func,   1, 1, name, delta=delta)
             self.assertFuncValue(func, 1.0, 1, name, delta=delta)
+
+    def test_halfway(self):
+        # Check that all the easeInOut* functions are halfway when passed 0.5.
+        delta = 2 ** -15  # i.e. VERY small
+        for name in TWEENS:
+            func = getattr(pytweening, name)
+            if name.startswith('easeInOut'):
+                self.assertFuncValue(func, 0.5, 0.5, name, delta=delta)
 
     def test_wrong_input(self):
         for name in TWEENS:
@@ -110,6 +121,7 @@ class TestAll(unittest.TestCase, CustomAssertions):
 
                 with self.assertRaises(ValueError, **kwargs):
                     func(input)
+
 
 
 if __name__ == '__main__':
