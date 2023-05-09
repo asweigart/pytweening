@@ -1,9 +1,12 @@
 from __future__ import division
 
 import math
-from typing import List, Tuple, Union
+try:
+    from typing import List, Tuple, Union
+except ImportError:
+    pass  # This is fine; it happens on Python 2.6 and before, but type hints aren't supported there anyway.
 
-__version__ = '1.0.6'
+__version__ = '1.0.7'
 
 
 # from http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm#Python
