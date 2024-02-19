@@ -110,6 +110,8 @@ class TestAll(unittest.TestCase, CustomAssertions):
                 self.assertFuncValue(func, 0.5, 0.5, name, delta=delta)
 
     def test_wrong_input(self):
+        # We've removed the 0.0 to 1.0 range check.
+        """
         for name in TWEENS:
             func = getattr(pytweening, name)
             for input in [-1, -0.5, 1.5, 2]:
@@ -121,6 +123,44 @@ class TestAll(unittest.TestCase, CustomAssertions):
 
                 with self.assertRaises(ValueError, **kwargs):
                     func(input)
+        """
+
+    def test_iterators(self):
+        # Basic test that just calls the iterators and gets all their values in a list:
+        list(pytweening.iterLinear(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInQuad(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutQuad(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutQuad(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInCubic(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutCubic(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutCubic(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInQuart(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutQuart(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutQuart(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInQuint(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutQuint(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutQuint(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInPoly(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutPoly(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutPoly(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInSine(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutSine(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutSine(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInExpo(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutExpo(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutExpo(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInCirc(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutCirc(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutCirc(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInElastic(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutElastic(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutElastic(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInBack(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutBack(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutBack(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInBounce(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseOutBounce(0, 0, 100, 100, 0.01))
+        list(pytweening.iterEaseInOutBounce(0, 0, 100, 100, 0.01))
 
 
 

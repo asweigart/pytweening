@@ -6,7 +6,7 @@ try:
 except ImportError:
     pass  # This is fine; it happens on Python 2.6 and before, but type hints aren't supported there anyway.
 
-__version__ = '1.0.7'
+__version__ = '1.2.0'
 
 
 # from http://www.roguebasin.com/index.php?title=Bresenham%27s_Line_Algorithm#Python
@@ -68,15 +68,15 @@ def getLine(x1, y1, x2, y2):  # type: (int, int, int, int) -> List[Tuple[int, in
     return points
 
 
-def getPointOnLine(x1, y1, x2, y2, n):  # type: (Union[int, float], Union[int, float], Union[int, float], Union[int, float], Union[int, float]) -> Tuple[Union[int, float], Union[int, float]]
+def getPointOnLine(startX, startY, endX, endY, n):  # type: (Union[int, float], Union[int, float], Union[int, float], Union[int, float], Union[int, float]) -> Tuple[Union[int, float], Union[int, float]]
     """Returns the (x, y) tuple of the point that has progressed a proportion
     n along the line defined by the two x, y coordinates.
 
     Args:
-      x1 (int, float): The x coordinate of the line's start point.
-      y1 (int, float): The y coordinate of the line's start point.
-      x2 (int, float): The x coordinate of the line's end point.
-      y2 (int, float): The y coordiante of the line's end point.
+      startX (int, float): The x coordinate of the line's start point.
+      startY (int, float): The y coordinate of the line's start point.
+      endX (int, float): The x coordinate of the line's end point.
+      endY (int, float): The y coordinate of the line's end point.
       n (int, float): Progress along the line. 0.0 is the start point, 1.0 is the end point. 0.5 is the midpoint. This value can be less than 0.0 or greater than 1.0.
 
     Returns:
@@ -98,19 +98,27 @@ def getPointOnLine(x1, y1, x2, y2, n):  # type: (Union[int, float], Union[int, f
     >>> getPointOnLine(3, 3, -3, -3, 0.75)
     (-1.5, -1.5)
     """
-    x = ((x2 - x1) * n) + x1
-    y = ((y2 - y1) * n) + y1
-    return (x, y)
+    return (((endX - startX) * n) + startX, ((endY - startY) * n) + startY)
 
 
-def _checkRange(n):  # type: (Union[int, float]) -> None
-    """Raises ValueError if the argument is not between 0.0 and 1.0."""
-    if not 0.0 <= n <= 1.0:
-        raise ValueError('Argument must be between 0.0 and 1.0.')
+def _iterTween(startX, startY, endX, endY, intervalSize, tweeningFunc, *args):
+    ti = tweeningFunc(0.0, *args)
+    yield (((endX - startX) * ti) + startX, ((endY - startY) * ti) + startY)
+
+    n = intervalSize
+
+    # The weird number is to prevent 0.999999 from being used in addition to 1.0 at the end of the function (i.e. rounding error prevention):
+    while n + 1.1102230246251565e-16 < 1.0:
+        ti = tweeningFunc(n, *args)
+        yield (((endX - startX) * ti) + startX, ((endY - startY) * ti) + startY)
+        n += intervalSize
+
+    ti = tweeningFunc(1.0, *args)
+    yield (((endX - startX) * ti) + startX, ((endY - startY) * ti) + startY)
 
 
 def linear(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A linear tween function
+    """Constant speed tween function.
 
     Example:
     >>> linear(0.0)
@@ -126,46 +134,63 @@ def linear(n):  # type: (Union[int, float]) -> Union[int, float]
     >>> linear(1.0)
     1.0
     """
-    _checkRange(n)
     return n
 
 
+def iterLinear(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a linear tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, linear))
+
+
 def easeInQuad(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A quadratic tween function that begins slow and then accelerates.
+    """Start slow and accelerate (Quadratic function).
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return n**2
 
 
+def iterEaseInQuad(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInQuad tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInQuad))
+
+
 def easeOutQuad(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A quadratic tween function that begins fast and then decelerates.
+    """Starts fast and decelerates to stop. (Quadratic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return -n * (n - 2)
 
 
+def iterEaseOutQuad(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeOutQuad tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutQuad))
+
+
 def easeInOutQuad(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A quadratic tween function that accelerates, reaches the midpoint, and then decelerates.
+    """Accelerates, reaches the midpoint, and then decelerates. (Quadratic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     if n < 0.5:
         return 2 * n**2
     else:
@@ -173,43 +198,61 @@ def easeInOutQuad(n):  # type: (Union[int, float]) -> Union[int, float]
         return -0.5 * (n * (n - 2) - 1)
 
 
+def iterEaseInOutQuad(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInOutQuad tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutQuad))
+
+
 def easeInCubic(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A cubic tween function that begins slow and then accelerates.
+    """Starts fast and decelerates. (Cubic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return n**3
 
 
+def iterEaseInCubic(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInCubic tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInCubic))
+
+
 def easeOutCubic(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A cubic tween function that begins fast and then decelerates.
+    """Starts fast and decelerates to stop. (Cubic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n -= 1
     return n**3 + 1
 
 
+def iterEaseOutCubic(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeOutCubic tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutCubic))
+
+
 def easeInOutCubic(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A cubic tween function that accelerates, reaches the midpoint, and then decelerates.
+    """Accelerates, reaches the midpoint, and then decelerates. (Cubic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n *= 2
     if n < 1:
         return 0.5 * n**3
@@ -218,43 +261,61 @@ def easeInOutCubic(n):  # type: (Union[int, float]) -> Union[int, float]
         return 0.5 * (n**3 + 2)
 
 
+def iterEaseInOutCubic(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInOutCubic tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutCubic))
+
+
 def easeInQuart(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A quartic tween function that begins slow and then accelerates.
+    """Starts fast and decelerates. (Quartic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return n**4
 
 
+def iterEaseInQuart(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInQuart tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInQuart))
+
+
 def easeOutQuart(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A quartic tween function that begins fast and then decelerates.
+    """Starts fast and decelerates to stop. (Quartic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n -= 1
     return -(n**4 - 1)
 
 
+def iterEaseOutQuart(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeOutQuart tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutQuart))
+
+
 def easeInOutQuart(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A quartic tween function that accelerates, reaches the midpoint, and then decelerates.
+    """Accelerates, reaches the midpoint, and then decelerates. (Quartic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n *= 2
     if n < 1:
         return 0.5 * n**4
@@ -263,43 +324,61 @@ def easeInOutQuart(n):  # type: (Union[int, float]) -> Union[int, float]
         return -0.5 * (n**4 - 2)
 
 
+def iterEaseInOutQuart(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInOutQuart tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutQuart))
+
+
 def easeInQuint(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A quintic tween function that begins slow and then accelerates.
+    """Starts fast and decelerates. (Quintic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return n**5
 
 
+def iterEaseInQuint(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInQuint tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInQuint))
+
+
 def easeOutQuint(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A quintic tween function that begins fast and then decelerates.
+    """Starts fast and decelerates to stop. (Quintic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n -= 1
     return n**5 + 1
 
 
+def iterEaseOutQuint(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeOutQuint tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutQuint))
+
+
 def easeInOutQuint(n):  # type: (Union[int, float]) -> Union[int, float]
-    """A quintic tween function that accelerates, reaches the midpoint, and then decelerates.
+    """Accelerates, reaches the midpoint, and then decelerates. (Quintic function.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n *= 2
     if n < 1:
         return 0.5 * n**5
@@ -308,46 +387,67 @@ def easeInOutQuint(n):  # type: (Union[int, float]) -> Union[int, float]
         return 0.5 * (n**5 + 2)
 
 
+def iterEaseInOutQuint(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInOutQuint tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutQuint))
+
+
 def easeInPoly(n, degree=2):  # type: (Union[int, float], Union[int, float]) -> Union[int, float]
-    """A polynomial tween function of given degree that begins slow and then accelerates.
+    """Starts fast and decelerates. (Polynomial function with custom degree.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
+      degree (int, float): The degree of the polynomial function.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     if not isinstance(degree, (int, float)) or degree < 0:
         raise ValueError('degree argument must be a positive number.')
     return n**degree
 
 
+def iterEaseInPoly(startX, startY, endX, endY, intervalSize, degree=2):
+    """Returns an iterator of a easeInPoly tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInPoly, degree))
+
+
 def easeOutPoly(n, degree=2):  # type: (Union[int, float], Union[int, float]) -> Union[int, float]
-    """A polynomial tween function of given degree that begins fast and then decelerates.
+    """Starts fast and decelerates to stop. (Polynomial function with custom degree.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
+      degree (int, float): The degree of the polynomial function.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     if not isinstance(degree, (int, float)) or degree < 0:
         raise ValueError('degree argument must be a positive number.')
     return 1 - abs((n - 1) ** degree)
 
 
+def iterEaseOutPoly(startX, startY, endX, endY, intervalSize, degree=2):
+    """Returns an iterator of a easeOutPoly tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutPoly, degree))
+
+
 def easeInOutPoly(n, degree=2):  # type: (Union[int, float], Union[int, float]) -> Union[int, float]
-    """A polynomial tween function of given degree that accelerates, reaches the midpoint, and then decelerates.
+    """Starts fast and decelerates to stop. (Polynomial function with custom degree.)
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
+      degree (int, float): The degree of the polynomial function.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     if not isinstance(degree, (int, float)) or degree < 0:
         raise ValueError('degree argument must be a positive number.')
 
@@ -359,87 +459,123 @@ def easeInOutPoly(n, degree=2):  # type: (Union[int, float], Union[int, float]) 
         return 1 - 0.5 * abs(n**degree)
 
 
+def iterEaseInOutPoly(startX, startY, endX, endY, intervalSize, degree=2):
+    """Returns an iterator of a easeInOutPoly tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutPoly, degree))
+
+
 def easeInSine(n):  # type: (Union[int, float]) -> Union[int, float]
     """A sinusoidal tween function that begins slow and then accelerates.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return -1 * math.cos(n * math.pi / 2) + 1
+
+
+def iterEaseInSine(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInSine tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInSine))
 
 
 def easeOutSine(n):  # type: (Union[int, float]) -> Union[int, float]
     """A sinusoidal tween function that begins fast and then decelerates.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return math.sin(n * math.pi / 2)
+
+
+def iterEaseOutSine(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeOutSine tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutSine))
 
 
 def easeInOutSine(n):  # type: (Union[int, float]) -> Union[int, float]
     """A sinusoidal tween function that accelerates, reaches the midpoint, and then decelerates.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return -0.5 * (math.cos(math.pi * n) - 1)
+
+
+def iterEaseInOutSine(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInOutSine tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutSine))
 
 
 def easeInExpo(n):  # type: (Union[int, float]) -> Union[int, float]
     """An exponential tween function that begins slow and then accelerates.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     if n == 0:
         return 0
     else:
         return 2 ** (10 * (n - 1))
 
 
+def iterEaseInExpo(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInExpo tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInExpo))
+
+
 def easeOutExpo(n):  # type: (Union[int, float]) -> Union[int, float]
     """An exponential tween function that begins fast and then decelerates.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     if n == 1:
         return 1
     else:
         return -(2 ** (-10 * n)) + 1
 
 
+def iterEaseOutExpo(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeOutExpo tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutExpo))
+
+
 def easeInOutExpo(n):  # type: (Union[int, float]) -> Union[int, float]
     """An exponential tween function that accelerates, reaches the midpoint, and then decelerates.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     if n == 0:
         return 0
     elif n == 1:
@@ -454,43 +590,63 @@ def easeInOutExpo(n):  # type: (Union[int, float]) -> Union[int, float]
             return 0.5 * (-1 * (2 ** (-10 * n)) + 2)
 
 
+def iterEaseInOutExpo(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInOutExpo tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutExpo))
+
+
+
 def easeInCirc(n):  # type: (Union[int, float]) -> Union[int, float]
     """A circular tween function that begins slow and then accelerates.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return -1 * (math.sqrt(1 - n * n) - 1)
+
+
+def iterEaseInCirc(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInCirc tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInCirc))
+
 
 
 def easeOutCirc(n):  # type: (Union[int, float]) -> Union[int, float]
     """A circular tween function that begins fast and then decelerates.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n -= 1
     return math.sqrt(1 - (n * n))
+
+
+def iterEaseOutCirc(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeOutCirc tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutCirc))
 
 
 def easeInOutCirc(n):  # type: (Union[int, float]) -> Union[int, float]
     """A circular tween function that accelerates, reaches the midpoint, and then decelerates.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n *= 2
     if n < 1:
         return -0.5 * (math.sqrt(1 - n**2) - 1)
@@ -499,29 +655,41 @@ def easeInOutCirc(n):  # type: (Union[int, float]) -> Union[int, float]
         return 0.5 * (math.sqrt(1 - n**2) + 1)
 
 
+def iterEaseInOutCirc(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInOutCirc tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutCirc))
+
+
 def easeInElastic(n, amplitude=1, period=0.3):  # type: (Union[int, float], Union[int, float], Union[int, float]) -> Union[int, float]
     """An elastic tween function that begins with an increasing wobble and then snaps into the destination.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return 1 - easeOutElastic(1 - n, amplitude=amplitude, period=period)
+
+
+def iterEaseInElastic(startX, startY, endX, endY, intervalSize, amplitude=1, period=0.3):
+    """Returns an iterator of a easeInElastic tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInElastic, amplitude, period))
 
 
 def easeOutElastic(n, amplitude=1, period=0.3):  # type: (Union[int, float], Union[int, float], Union[int, float]) -> Union[int, float]
     """An elastic tween function that overshoots the destination and then "rubber bands" into the destination.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
 
     if amplitude < 1:
         amplitude = 1
@@ -532,16 +700,22 @@ def easeOutElastic(n, amplitude=1, period=0.3):  # type: (Union[int, float], Uni
     return amplitude * 2 ** (-10 * n) * math.sin((n - s) * (2 * math.pi / period)) + 1
 
 
+def iterEaseOutElastic(startX, startY, endX, endY, intervalSize, amplitude=1, period=0.3):
+    """Returns an iterator of a easeOutElastic tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutElastic, amplitude, period))
+
+
 def easeInOutElastic(n, amplitude=1, period=0.5):  # type: (Union[int, float], Union[int, float], Union[int, float]) -> Union[int, float]
     """An elastic tween function wobbles towards the midpoint.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n *= 2
     if n < 1:
         return easeInElastic(n, amplitude=amplitude, period=period) / 2
@@ -549,43 +723,61 @@ def easeInOutElastic(n, amplitude=1, period=0.5):  # type: (Union[int, float], U
         return easeOutElastic(n - 1, amplitude=amplitude, period=period) / 2 + 0.5
 
 
+def iterEaseInOutElastic(startX, startY, endX, endY, intervalSize, amplitude=1, period=0.5):
+    """Returns an iterator of a easeInOutElastic tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutElastic, amplitude, period))
+
+
 def easeInBack(n, s=1.70158):  # type: (Union[int, float], Union[int, float]) -> Union[int, float]
     """A tween function that backs up first at the start and then goes to the destination.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return n * n * ((s + 1) * n - s)
+
+
+def iterEaseInBack(startX, startY, endX, endY, intervalSize, s=1.70158):
+    """Returns an iterator of a easeInBack tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInBack, s))
 
 
 def easeOutBack(n, s=1.70158):  # type: (Union[int, float], Union[int, float]) -> Union[int, float]
     """A tween function that overshoots the destination a little and then backs into the destination.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n -= 1
     return n * n * ((s + 1) * n + s) + 1
+
+
+def iterEaseOutBack(startX, startY, endX, endY, intervalSize, s=1.70158):
+    """Returns an iterator of a easeOutBack tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutBack, s))
 
 
 def easeInOutBack(n, s=1.70158):  # type: (Union[int, float], Union[int, float]) -> Union[int, float]
     """A "back-in" tween function that overshoots both the start and destination.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     n *= 2
     if n < 1:
         s *= 1.525
@@ -596,29 +788,41 @@ def easeInOutBack(n, s=1.70158):  # type: (Union[int, float], Union[int, float])
         return 0.5 * (n * n * ((s + 1) * n + s) + 2)
 
 
+def iterEaseInOutBack(startX, startY, endX, endY, intervalSize, s=1.70158):
+    """Returns an iterator of a easeInOutBack tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutBack, s))
+
+
 def easeInBounce(n):  # type: (Union[int, float]) -> Union[int, float]
     """A bouncing tween function that begins bouncing and then jumps to the destination.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     return 1 - easeOutBounce(1 - n)
+
+
+def iterEaseInBounce(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInBounce tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInBounce))
 
 
 def easeOutBounce(n):  # type: (Union[int, float]) -> Union[int, float]
     """A bouncing tween function that hits the destination and then bounces to rest.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     if n < (1 / 2.75):
         return 7.5625 * n * n
     elif n < (2 / 2.75):
@@ -632,17 +836,30 @@ def easeOutBounce(n):  # type: (Union[int, float]) -> Union[int, float]
         return 7.5625 * n * n + 0.984375
 
 
+def iterEaseOutBounce(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeOutBounce tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutBounce))
+
+
 def easeInOutBounce(n):  # type: (Union[int, float]) -> Union[int, float]
     """A bouncing tween function that bounces at the start and end.
 
     Args:
-      n (float): The time progress, starting at 0.0 and ending at 1.0.
+      n (int, float): The time progress, starting at 0.0 and ending at 1.0.
 
     Returns:
       (float) The line progress, starting at 0.0 and ending at 1.0. Suitable for passing to getPointOnLine().
     """
-    _checkRange(n)
     if n < 0.5:
         return easeInBounce(n * 2) * 0.5
     else:
         return easeOutBounce(n * 2 - 1) * 0.5 + 0.5
+
+
+def iterEaseInOutBounce(startX, startY, endX, endY, intervalSize):
+    """Returns an iterator of a easeInOutBounce tween between the start and end points, incrementing the
+    interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
+    and 1.0 last no matter the intervalSize."""
+    return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutBounce))

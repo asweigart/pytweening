@@ -22,7 +22,7 @@ setup(
     url="https://github.com/asweigart/pytweening",
     author="Al Sweigart",
     author_email="al@inventwithpython.com",
-    description=("""A collection of tweening / easing functions."""),
+    description=("""A collection of tweening (aka easing) functions."""),
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
@@ -50,5 +50,6 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
     ],
 )
