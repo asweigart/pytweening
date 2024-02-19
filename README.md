@@ -78,105 +78,139 @@ Tweens
 ======
 
 pytweening.linear()
+
 ![pytweening.linear()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphLinear.png)
 
 pytweening.easeInQuad()
+
 ![pytweening.easeInQuad()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinquad.png)
 
 pytweening.easeOutQuad()
+
 ![pytweening.easeOutQuad()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutquad.png)
 
 pytweening.easeInOutQuad()
+
 ![pytweening.easeInOutQuad()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutquad.png)
 
 pytweening.easeInCubic()
+
 ![pytweening.easeInCubic()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseincubic.png)
 
 pytweening.easeOutCubic()
+
 ![pytweening.easeOutCubic()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutcubic.png)
 
 pytweening.easeInOutCubic()
+
 ![pytweening.easeInOutCubic()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutcubic.png)
 
 pytweening.easeInQuart()
+
 ![pytweening.easeInQuart()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinquart.png)
 
 pytweening.easeOutQuart()
+
 ![pytweening.easeOutQuart()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutquart.png)
 
 pytweening.easeInOutQuart()
+
 ![pytweening.easeInOutQuart()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutquart.png)
 
 pytweening.easeInQuint()
+
 ![pytweening.easeInQuint()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinquint.png)
 
 pytweening.easeOutQuint()
+
 ![pytweening.easeOutQuint()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutquint.png)
 
 pytweening.easeInOutQuint()
+
 ![pytweening.easeInOutQuint()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutquint.png)
 
 pytweening.easeInSine()
+
 ![pytweening.easeInSine()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinsine.png)
 
 pytweening.easeOutSine()
+
 ![pytweening.easeOutSine()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutsine.png)
 
 pytweening.easeInOutSine()
+
 ![pytweening.easeInOutSine()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutsine.png)
 
 pytweening.easeInExpo()
+
 ![pytweening.easeInExpo()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinexpo.png)
 
 pytweening.easeOutExpo()
+
 ![pytweening.easeOutExpo()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutexpo.png)
 
 pytweening.easeInOutExpo()
+
 ![pytweening.easeInOutExpo()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutexpo.png)
 
 pytweening.easeInCirc()
+
 ![pytweening.easeInCirc()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseincirc.png)
 
 pytweening.easeOutCirc()
+
 ![pytweening.easeOutCirc()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutcirc.png)
 
 pytweening.easeInOutCirc()
+
 ![pytweening.easeInOutCirc()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutcirc.png)
 
 pytweening.easeInElastic()
+
 ![pytweening.easeInElastic()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinelastic.png)
 
 pytweening.easeOutElastic()
+
 ![pytweening.easeOutElastic()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutelastic.png)
 
 pytweening.easeInOutElastic()
+
 ![pytweening.easeInOutElastic()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutelastic.png)
 
 pytweening.easeInBack()
+
 ![pytweening.easeInBack()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinback.png)
 
 pytweening.easeOutBack()
+
 ![pytweening.easeOutBack()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutback.png)
 
 pytweening.easeInOutBack()
+
 ![pytweening.easeInOutBack()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutback.png)
 
 pytweening.easeInBounce()
+
 ![pytweening.easeInBounce()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinbounce.png)
 
 pytweening.easeOutBounce()
+
 ![pytweening.easeOutBounce()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutbounce.png)
 
 pytweening.easeInOutBounce()
+
 ![pytweening.easeInOutBounce()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutbounce.png)
 
 pytweening.easeInPoly() (default degree of 2)
+
 ![pytweening.easeInPoly()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinpoly.png)
 
 pytweening.easeOutPoly() (default degree of 2)
+
 ![pytweening.easeOutPoly()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseoutpoly.png)
 
 pytweening.easeInOutPoly() (default degree of 2)
+
 ![pytweening.easeInOutPoly()](https://raw.githubusercontent.com/asweigart/pytweening/master/docs/tweenGraphEaseinoutpoly.png)
 
 
