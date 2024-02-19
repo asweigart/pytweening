@@ -1,6 +1,7 @@
 from __future__ import division
 
 import math
+
 try:
     from typing import List, Tuple, Union
 except ImportError:
@@ -68,7 +69,9 @@ def getLine(x1, y1, x2, y2):  # type: (int, int, int, int) -> List[Tuple[int, in
     return points
 
 
-def getPointOnLine(startX, startY, endX, endY, n):  # type: (Union[int, float], Union[int, float], Union[int, float], Union[int, float], Union[int, float]) -> Tuple[Union[int, float], Union[int, float]]
+def getPointOnLine(
+    startX, startY, endX, endY, n
+):  # type: (Union[int, float], Union[int, float], Union[int, float], Union[int, float], Union[int, float]) -> Tuple[Union[int, float], Union[int, float]]
     """Returns the (x, y) tuple of the point that has progressed a proportion
     n along the line defined by the two x, y coordinates.
 
@@ -597,7 +600,6 @@ def iterEaseInOutExpo(startX, startY, endX, endY, intervalSize):
     return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutExpo))
 
 
-
 def easeInCirc(n):  # type: (Union[int, float]) -> Union[int, float]
     """A circular tween function that begins slow and then accelerates.
 
@@ -615,7 +617,6 @@ def iterEaseInCirc(startX, startY, endX, endY, intervalSize):
     interpolation factor by intervalSize each time. Guaranteed to return the point for 0.0 first
     and 1.0 last no matter the intervalSize."""
     return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInCirc))
-
 
 
 def easeOutCirc(n):  # type: (Union[int, float]) -> Union[int, float]
@@ -662,7 +663,9 @@ def iterEaseInOutCirc(startX, startY, endX, endY, intervalSize):
     return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInOutCirc))
 
 
-def easeInElastic(n, amplitude=1, period=0.3):  # type: (Union[int, float], Union[int, float], Union[int, float]) -> Union[int, float]
+def easeInElastic(
+    n, amplitude=1, period=0.3
+):  # type: (Union[int, float], Union[int, float], Union[int, float]) -> Union[int, float]
     """An elastic tween function that begins with an increasing wobble and then snaps into the destination.
 
     Args:
@@ -681,7 +684,9 @@ def iterEaseInElastic(startX, startY, endX, endY, intervalSize, amplitude=1, per
     return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeInElastic, amplitude, period))
 
 
-def easeOutElastic(n, amplitude=1, period=0.3):  # type: (Union[int, float], Union[int, float], Union[int, float]) -> Union[int, float]
+def easeOutElastic(
+    n, amplitude=1, period=0.3
+):  # type: (Union[int, float], Union[int, float], Union[int, float]) -> Union[int, float]
     """An elastic tween function that overshoots the destination and then "rubber bands" into the destination.
 
     Args:
@@ -707,7 +712,9 @@ def iterEaseOutElastic(startX, startY, endX, endY, intervalSize, amplitude=1, pe
     return iter(_iterTween(startX, startY, endX, endY, intervalSize, easeOutElastic, amplitude, period))
 
 
-def easeInOutElastic(n, amplitude=1, period=0.5):  # type: (Union[int, float], Union[int, float], Union[int, float]) -> Union[int, float]
+def easeInOutElastic(
+    n, amplitude=1, period=0.5
+):  # type: (Union[int, float], Union[int, float], Union[int, float]) -> Union[int, float]
     """An elastic tween function wobbles towards the midpoint.
 
     Args:
