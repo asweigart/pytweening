@@ -1,7 +1,7 @@
 PyTweening
 ==========
 
-A collection of tweening (aka easing) functions implemented in Python. You can learn more about it in this blog post: https://inventwithpython.com/blog/TODO and in the Nordic Game Jam talk by Martin Jonasson and Petri Purho at https://youtu.be/Fy0aCDmgnxg?si=8pgITaxjJSKFyBuB&t=159
+A collection of tweening (aka easing) functions implemented in Python. You can learn more about it in this blog post: https://inventwithpython.com/blog/2024/02/20/make-lively-movement-animation-with-pytweenings-tweening-functions/ and in the Nordic Game Jam talk by Martin Jonasson and Petri Purho at https://youtu.be/Fy0aCDmgnxg?si=8pgITaxjJSKFyBuB&t=159
 
 Example Usage
 =============
